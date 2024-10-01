@@ -1,4 +1,4 @@
-package backend.academy;
+package backend.academy.maze;
 
 import lombok.experimental.UtilityClass;
 
