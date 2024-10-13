@@ -27,13 +27,13 @@ public class ConsoleRenderer implements Renderer {
         return "";
     }
 
-    private char renderSurface(Surface surface) {
+    private String renderSurface(Surface surface) {
         return switch (surface) {
-            case WALL -> '█';       // Стена
-            case PASSAGE -> ' ';    // Проход
-            case SWAMP -> '▒';      // Болото
-            case SAND -> '░';       // Песок
-            case COIN -> '✪';       // Монетка
+            case WALL -> "⬜"; // Стена
+            case PASSAGE -> "⬛"; // Проход
+            case SWAMP -> "\uD83D\uDFEB"; // Болото
+            case SAND -> "\uD83D\uDFE8"; // Песок
+            case COIN -> "\uD83E\uDE99"; // Монетка
         };
     }
 
