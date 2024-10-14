@@ -6,7 +6,6 @@ import backend.academy.maze.data.Surface;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PrimMazeGenerator implements Generator {
     private static final int PASSAGE_WEIGHT = 95;
@@ -14,36 +13,37 @@ public class PrimMazeGenerator implements Generator {
     private static final int SWAMP_WEIGHT = 1;
     private static final int COIN_WEIGHT = 2;
 
-    private final Random random;
     private final int height;
     private final int width;
+    private final Cell[][] grid;
+    private final SecureRandom random = new SecureRandom();
 
     public PrimMazeGenerator(int height, int width) {
         this.height = height;
         this.width = width;
-        random = new SecureRandom();
+        this.grid = new Cell[height][width];
+        initializeGrid();
     }
 
     @Override
     public Maze generate() {
-        Cell[][] grid = initializeGrid(height, width);
         int startRow = random.nextInt(height);
         int startCol = random.nextInt(width);
         Cell startCell = grid[startRow][startCol];
         grid[startRow][startCol] = new Cell(startCell.row(), startCell.col(), Surface.PASSAGE);
 
         List<Cell> borders = new ArrayList<>();
-        addBorderCells(grid, startCell, borders);
+        addBorderCells(startCell, borders);
 
         while (!borders.isEmpty()) {
             int index = random.nextInt(borders.size());
             Cell cell = borders.get(index);
-            if (cell.surface() == Surface.WALL) {
+            if (grid[cell.row()][cell.col()].surface() == Surface.WALL) {
                 grid[cell.row()][cell.col()] = new Cell(cell.row(), cell.col(), getRandomNonWallSurface());
                 borders.remove(index);
 
-                createPassageInDirection(grid, cell);
-                addBorderCells(grid, cell, borders);
+                createPassageInDirection(grid[cell.row()][cell.col()]);
+                addBorderCells(grid[cell.row()][cell.col()], borders);
             }
 
         }
@@ -52,7 +52,7 @@ public class PrimMazeGenerator implements Generator {
 
     // Очистка прохода к случайной соседней клетке в одном из направлений (север, юг, восток, запад),
     // если соседняя клетка на расстоянии двух клеток доступна.
-    private void createPassageInDirection(Cell[][] grid, Cell cell) {
+    private void createPassageInDirection(Cell cell) {
         enum Direction {
             NORTH, SOUTH, EAST, WEST
         }
@@ -100,33 +100,33 @@ public class PrimMazeGenerator implements Generator {
     }
 
     // Добавление ячеек-стен, расположенных на расстоянии двух ортогональных пробелов от выбранной ячейки
-    private void addBorderCells(Cell[][] grid, Cell cell, List<Cell> borders) {
+    private void addBorderCells(Cell cell, List<Cell> borders) {
         int row = cell.row();
         int col = cell.col();
 
-        if (col - 2 >= 0 && grid[row][col - 2].surface() == Surface.WALL) {
+        if (col - 2 >= 0 && grid[row][col - 2].surface() == Surface.WALL && !borders.contains(grid[row][col - 2])) {
             borders.add(grid[row][col - 2]);
         }
-        if (col + 2 < grid.length && grid[row][col + 2].surface() == Surface.WALL) {
+        if (col + 2 < grid.length && grid[row][col + 2].surface() == Surface.WALL
+            && !borders.contains(grid[row][col + 2])) {
             borders.add(grid[row][col + 2]);
         }
-        if (row - 2 >= 0 && grid[row - 2][col].surface() == Surface.WALL) {
+        if (row - 2 >= 0 && grid[row - 2][col].surface() == Surface.WALL && !borders.contains(grid[row - 2][col])) {
             borders.add(grid[row - 2][col]);
         }
-        if (row + 2 < grid[0].length && grid[row + 2][col].surface() == Surface.WALL) {
+        if (row + 2 < grid[0].length && grid[row + 2][col].surface() == Surface.WALL
+            && !borders.contains(grid[row + 2][col])) {
             borders.add(grid[row + 2][col]);
         }
     }
 
     // Инициализация grid из всех стен
-    private Cell[][] initializeGrid(int height, int width) {
-        Cell[][] grid = new Cell[height][width];
+    private void initializeGrid() {
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 grid[row][col] = new Cell(row, col, Surface.WALL);  // Все клетки изначально стены
             }
         }
-        return grid;
     }
 
     // Метод для задания случайной поверхности (кроме стены)
