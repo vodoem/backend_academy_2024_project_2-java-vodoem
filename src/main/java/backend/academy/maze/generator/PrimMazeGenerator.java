@@ -15,13 +15,17 @@ public class PrimMazeGenerator implements Generator {
     private static final int COIN_WEIGHT = 2;
 
     private final Random random;
+    private final int height;
+    private final int width;
 
-    public PrimMazeGenerator() {
+    public PrimMazeGenerator(int height, int width) {
+        this.height = height;
+        this.width = width;
         random = new SecureRandom();
     }
 
     @Override
-    public Maze generate(int height, int width) {
+    public Maze generate() {
         Cell[][] grid = initializeGrid(height, width);
         int startRow = random.nextInt(height);
         int startCol = random.nextInt(width);
