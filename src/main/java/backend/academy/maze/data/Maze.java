@@ -19,6 +19,10 @@ public class Maze {
         return width;
     }
 
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
     public Cell getCell(int row, int col) {
         return grid[row][col];
     }

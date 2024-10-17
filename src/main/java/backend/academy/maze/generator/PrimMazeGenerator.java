@@ -9,9 +9,9 @@ import java.util.List;
 
 public class PrimMazeGenerator implements Generator {
     private static final int PASSAGE_WEIGHT = 95;
-    private static final int SAND_WEIGHT = 2;
-    private static final int SWAMP_WEIGHT = 1;
-    private static final int COIN_WEIGHT = 2;
+    private static final int SAND_WEIGHT = 5;
+    private static final int SWAMP_WEIGHT = 5;
+    private static final int COIN_WEIGHT = 15;
 
     private final int height;
     private final int width;
