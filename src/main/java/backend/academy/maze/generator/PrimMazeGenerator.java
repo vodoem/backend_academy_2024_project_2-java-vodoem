@@ -75,7 +75,7 @@ public class PrimMazeGenerator implements Generator {
                     }
                     break;
                 case SOUTH:
-                    if (col + 2 < grid.length && grid[row][col + 2].surface() != Surface.WALL) {
+                    if (col + 2 < width && grid[row][col + 2].surface() != Surface.WALL) {
                         grid[row][col + 1] = new Cell(row, col + 1, getRandomNonWallSurface());
                         directions.clear();
                     }
@@ -87,7 +87,7 @@ public class PrimMazeGenerator implements Generator {
                     }
                     break;
                 case WEST:
-                    if (row + 2 < grid[0].length && grid[row + 2][col].surface() != Surface.WALL) {
+                    if (row + 2 < height && grid[row + 2][col].surface() != Surface.WALL) {
                         grid[row + 1][col] = new Cell(row + 1, col, getRandomNonWallSurface());
                         directions.clear();
                     }
@@ -107,14 +107,14 @@ public class PrimMazeGenerator implements Generator {
         if (col - 2 >= 0 && grid[row][col - 2].surface() == Surface.WALL && !borders.contains(grid[row][col - 2])) {
             borders.add(grid[row][col - 2]);
         }
-        if (col + 2 < grid.length && grid[row][col + 2].surface() == Surface.WALL
+        if (col + 2 < width && grid[row][col + 2].surface() == Surface.WALL
             && !borders.contains(grid[row][col + 2])) {
             borders.add(grid[row][col + 2]);
         }
         if (row - 2 >= 0 && grid[row - 2][col].surface() == Surface.WALL && !borders.contains(grid[row - 2][col])) {
             borders.add(grid[row - 2][col]);
         }
-        if (row + 2 < grid[0].length && grid[row + 2][col].surface() == Surface.WALL
+        if (row + 2 < height && grid[row + 2][col].surface() == Surface.WALL
             && !borders.contains(grid[row + 2][col])) {
             borders.add(grid[row + 2][col]);
         }
