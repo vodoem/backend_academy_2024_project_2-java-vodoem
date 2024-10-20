@@ -34,7 +34,7 @@ public class AStarSolver implements Solver {
         Map<Coordinate, Coordinate> cameFrom = new HashMap<>(); // Храним путь
 
         gScore.put(start, 0.0); // Начальная точка
-        priorityQueue.add(new Node(start, 0, heuristic(start, end)));
+        priorityQueue.add(new Node(start, heuristic(start, end)));
 
         // Пока есть узлы для обработки
         while (!priorityQueue.isEmpty()) {
@@ -69,7 +69,7 @@ public class AStarSolver implements Solver {
                         gScore.put(neighbor, tentativeGScore);
 
                         double fScore = tentativeGScore + heuristic(neighbor, end); // f(n) = g(n) + h(n)
-                        priorityQueue.add(new Node(neighbor, tentativeGScore, fScore));
+                        priorityQueue.add(new Node(neighbor, fScore));
                     }
                 }
             }
@@ -113,12 +113,10 @@ public class AStarSolver implements Solver {
     // Вспомогательный класс для узла
     private static class Node {
         Coordinate coordinate;
-        double g; // фактическая стоимость пути до клетки
         double f; // f(n) = g(n) + h(n)
 
-        Node(Coordinate coordinate, double g, double f) {
+        Node(Coordinate coordinate, double f) {
             this.coordinate = coordinate;
-            this.g = g;
             this.f = f;
         }
 
