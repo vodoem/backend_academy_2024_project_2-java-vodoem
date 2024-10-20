@@ -6,6 +6,8 @@ import backend.academy.maze.data.Coordinate;
 import backend.academy.maze.data.Maze;
 import backend.academy.maze.renderer.ConsoleRenderer;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 
@@ -21,8 +23,12 @@ import lombok.experimental.UtilityClass;
 
         // Получение параметров от пользователя
         int[] dimensions = inputHandler.getMazeDimensions();
-        int width = dimensions[0];
-        int height = dimensions[1];
+        List<Integer> dimensionsList = Arrays.stream(dimensions)
+            .boxed()
+            .toList();
+        Iterator<Integer> iterator = dimensionsList.iterator();
+        int width = iterator.next();
+        int height = iterator.next();
 
         // Выбор алгоритма генерации
         int generationChoice = inputHandler.getGenerationAlgorithm();

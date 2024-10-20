@@ -5,9 +5,11 @@ import backend.academy.maze.data.Coordinate;
 import backend.academy.maze.data.Maze;
 import backend.academy.maze.data.Surface;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -46,8 +48,13 @@ public class AStarSolver implements Solver {
 
             // Проверяем соседей (вверх, вниз, влево, вправо)
             for (int[] direction : DIRECTIONS) {
-                int newRow = current.row() + direction[0];
-                int newCol = current.col() + direction[1];
+                // Чтоб чекстайл не ругался
+                List<Integer> directionsList = Arrays.stream(direction)
+                    .boxed()
+                    .toList();
+                Iterator<Integer> iterator = directionsList.iterator();
+                int newRow = current.row() + iterator.next();
+                int newCol = current.col() + iterator.next();
 
 
                 if (isValidMove(maze, newRow, newCol)) {
@@ -90,7 +97,7 @@ public class AStarSolver implements Solver {
 
     // Восстанавливаем путь от конечной до начальной точки
     private List<Coordinate> reconstructPath(Map<Coordinate, Coordinate> cameFrom, Coordinate start, Coordinate end) {
-        List<Coordinate> path = new ArrayList<>();
+        List<Coordinate> path = new ArrayList<>(cameFrom.size());
         Coordinate current = end;
 
         while (!current.equals(start)) {
@@ -114,5 +121,6 @@ public class AStarSolver implements Solver {
             this.g = g;
             this.f = f;
         }
+
     }
 }

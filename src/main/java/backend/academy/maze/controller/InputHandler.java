@@ -13,13 +13,14 @@ public class InputHandler {
 
     // Ввод размеров лабиринта
     public int[] getMazeDimensions() {
+
         printStream.println(
             "Введите размер лабиринта. Для более красивого результата введите нечетные значения. (ширина высота):");
         int width = scanner.nextInt();
         int height = scanner.nextInt();
         if (width <= 0 || height <= 0) {
             printStream.println("Неверный размер. Повторите ввод.");
-            getMazeDimensions();
+            return getMazeDimensions();
         }
         return new int[] {width, height};
     }
