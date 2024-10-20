@@ -3,13 +3,10 @@ package backend.academy.maze.solver;
 import backend.academy.maze.data.Cell;
 import backend.academy.maze.data.Coordinate;
 import backend.academy.maze.data.Maze;
-import backend.academy.maze.data.Surface;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -50,15 +47,11 @@ public class BFSSolver implements Solver {
 
             // Проверяем соседей (вверх, вниз, вправо, влево)
             for (int[] direction : DIRECTIONS) {
-                // Чтоб чекстайл не ругался
-                List<Integer> directionsList = Arrays.stream(direction)
-                    .boxed()
-                    .toList();
-                Iterator<Integer> iterator = directionsList.iterator();
-                int newRow = current.row() + iterator.next();
-                int newCol = current.col() + iterator.next();
+                Coordinate newCoordinate = MazeUtils.updateCoordinates(current, direction);
+                int newRow = newCoordinate.row();
+                int newCol = newCoordinate.col();
 
-                if (isValidMove(maze, newRow, newCol)) {
+                if (MazeUtils.isValidMove(maze, newRow, newCol)) {
                     Coordinate neighbor = new Coordinate(newRow, newCol);
                     int newCost
                         = currentNode.cost + grid[newRow][newCol].surface().getWeight(); // Добавляем вес поверхности
@@ -76,17 +69,6 @@ public class BFSSolver implements Solver {
 
         // Если путь не найден, возвращаем пустой список
         return List.of();
-    }
-
-    // Проверяем, можно ли сделать ход в указанную клетку
-    private boolean isValidMove(Maze maze, int row, int col) {
-        int height = maze.getHeight();
-        int width = maze.getWidth();
-
-        // Клетка должна быть в пределах лабиринта и не быть стеной
-        return row >= 0 && row < height
-            && col >= 0 && col < width
-            && maze.getGrid()[row][col].surface() != Surface.WALL;
     }
 
     // Восстанавливаем путь от конечной до начальной точки
